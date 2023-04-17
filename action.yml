@@ -19,4 +19,4 @@ runs:
         old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
 
         # Use sed to replace the substrings with the new string in all files in the current directory
-        sed -i "s/$old_substrings/${{ inputs.replace }}/g" ./*
+        find . -type f -exec sed -i "s/$old_substrings/${{ inputs.replace }}/g" ./* +
