@@ -11,6 +11,7 @@ inputs:
     
 runs:
   steps:
+    using: "composite"
     shell: bash
     run: |
       # Escape any forward slashes in the substrings
