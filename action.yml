@@ -12,10 +12,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    shell: bash
-    run: |
-      # Escape any forward slashes in the substrings
-      old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
+  
+    - shell: bash
+      run: |
+        # Escape any forward slashes in the substrings
+        old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
 
-      # Use sed to replace the substrings with the new string in all files in the current directory
-      sed -i "s/$old_substrings/${{ inputs.replace }}/g" ./*
+        # Use sed to replace the substrings with the new string in all files in the current directory
+        sed -i "s/$old_substrings/${{ inputs.replace }}/g" ./*
