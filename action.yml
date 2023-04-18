@@ -13,6 +13,11 @@ inputs:
     type: boolean
     required: false
     default: false
+  ignore_case:
+    description: "Ignore case when doing match"
+    type: boolean
+    required: false
+    default: true
   regex-in-find:
     description: "Word given in 'find' to be considered as regex"
     type: boolean
@@ -64,5 +69,10 @@ runs:
         sed_replacement_string="$find_substring/$replace_substring"
         echo $sed_replacement_string
 
+        sed_params="/g"
+        if [[ "${{ inputs.ignore_case }}" == "true" ]]; then
+          sed_params="/Ig"
+        fi
+
         # Use sed to replace the substrings with the new string in all files in the current directory
-        find . -type f -not -path '.git/*' -exec sed -i "s/$sed_replacement_string/g" {} +
+        find . -type f -not -path '.git/*' -exec sed -i "s/$sed_replacement_string$sed_params" {} +
