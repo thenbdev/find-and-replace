@@ -22,12 +22,12 @@ inputs:
     description: "Word given in 'find' to be considered as regex"
     type: boolean
     required: false
-    default: ${{ regex }}
+    default: ${{ inputs.regex }}
   regex-in-replace:
     description: "Word given in 'replace' to be considered as regex"
     type: boolean
     required: false
-    default: ${{ regex }}
+    default: ${{ inputs.regex }}
 
 runs:
   using: "composite"
