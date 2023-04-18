@@ -53,7 +53,7 @@ runs:
 
 
         if [[ "${{ steps.escape-string-replace.outputs.text == null }}" == "true" ]]; then
-          find_substring="${{ inputs.replace }}"
+          replace_substring="${{ inputs.replace }}"
         fi
         echo "Using replace text:"$replace_substring
 
