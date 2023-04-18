@@ -24,6 +24,20 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Escaped text in find"
+      if: ${{ inputs.regex-in-find == true }}
+      uses: thenbdev/escape-string@main
+      id: escape-string-find
+      with:
+        text: ${{ inputs.find }}
+
+    - name: "Escaped text in replace"
+      if: ${{ inputs.regex-in-replace == true }}
+      uses: thenbdev/escape-string@main
+      id: escape-string-replace
+      with:
+        text: ${{ inputs.replace }}
+
     - name: "Find and Replace main"
       shell: bash
       run: |
@@ -31,18 +45,17 @@ runs:
         replace_substring="${{ inputs.replace }}"
         echo "Given find:"$find_substring
         echo "Given replace:"$replace_substring
-        
 
-        if [[ "${{ inputs.regex-in-find }}" == "false" ]]; then
-          # Escape any regex characters
-          find_substring="$(<<< $find_substring sed -e 's`[][\\/.*^${}+|]`\\&`g')"
-          echo "Escaped find:"$find_substring
+        if [[ "${{ steps.escape-string-find.outputs.text == null }}" == "true" ]]; then
+          find_substring="${{ inputs.find }}"
         fi
-        if [[ "${{ inputs.regex-in-replace }}" == "false" ]]; then
-          # Escape any regex characters
-          replace_substring="$(<<< $replace_substring sed -e 's`[][\\/.*^${}+|]`\\&`g')"
-          echo "Escaped replace:"$replace_substring
+        echo "Using find text:"$find_substring
+
+
+        if [[ "${{ steps.escape-string-replace.outputs.text == null }}" == "true" ]]; then
+          find_substring="${{ inputs.replace }}"
         fi
+        echo "Using replace text:"$replace_substring
 
         sed_replacement_string="$find_substring/$new_substring"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
