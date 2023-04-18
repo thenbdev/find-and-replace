@@ -10,14 +10,17 @@ inputs:
     default: ""
   words_only:
     description: "Inputs to be considered as words or substring"
+    type: boolean
     required: false
     default: false
   regex-in-find:
     description: "Word given in 'find' to be considered as regex"
+    type: boolean
     required: false
     default: false
   regex-in-replace:
     description: "Word given in 'replace' to be considered as regex"
+    type: boolean
     required: false
     default: false
 
@@ -25,14 +28,17 @@ runs:
   using: "composite"
   steps:
     - name: "Escaped text in find"
-      if: ${{ inputs.regex-in-find == false }}
+      if: ${{ inputs.regex-in-find == 'false' }}
       uses: thenbdev/escape-string@main
       id: escape-string-find
       with:
         text: ${{ inputs.find }}
+      outputs:
+        text: ${{ steps.escape-string-find.outputs.text }}
+
 
     - name: "Escaped text in replace"
-      if: ${{ inputs.regex-in-replace == false }}
+      if: ${{ inputs.regex-in-replace == 'false' }}
       uses: thenbdev/escape-string@main
       id: escape-string-replace
       with:
@@ -41,6 +47,8 @@ runs:
     - name: "Find and Replace main"
       shell: bash
       run: |
+        echo ${{ inputs.regex-in-find == false }}
+        echo ${{ inputs.regex-in-find == 'false' }}
         find_substring="${{ steps.escape-string-find.outputs.text }}"
         if [[ "$find_substring" == "" ]]; then
           find_substring="${{ inputs.find }}"
