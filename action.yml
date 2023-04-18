@@ -26,7 +26,7 @@ runs:
 
         sed_replacement_string="$old_substrings/${{ inputs.replace }}"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
-          sed_replacement_string="\b".$sed_replacement_string
+          sed_replacement_string="\b"$sed_replacement_string
         fi
         echo $sed_replacement_string
 
