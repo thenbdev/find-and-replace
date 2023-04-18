@@ -13,21 +13,16 @@ inputs:
     type: boolean
     required: false
     default: false
-  regex:
-    description: "inputs to be considered as regex"
-    type: boolean
-    required: false
-    default: false
   regex-in-find:
     description: "Word given in 'find' to be considered as regex"
     type: boolean
     required: false
-    default: ${{ inputs.regex }}
+    default: false
   regex-in-replace:
     description: "Word given in 'replace' to be considered as regex"
     type: boolean
     required: false
-    default: ${{ inputs.regex }}
+    default: false
 
 runs:
   using: "composite"
