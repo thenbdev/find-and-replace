@@ -41,23 +41,19 @@ runs:
     - name: "Find and Replace main"
       shell: bash
       run: |
-        find_substring="${{ inputs.find }}"
-        replace_substring="${{ inputs.replace }}"
-        echo "Given find:"$find_substring
-        echo "Given replace:"$replace_substring
-
-        if [[ "${{ steps.escape-string-find.outputs.text == null }}" == "true" ]]; then
+        find_substring="${{ steps.escape-string-find.outputs.text }}"
+        if [[ "$find_substring" == "" ]]; then
           find_substring="${{ inputs.find }}"
         fi
         echo "Using find text:"$find_substring
 
-
-        if [[ "${{ steps.escape-string-replace.outputs.text == null }}" == "true" ]]; then
+        replace_substring="${{ steps.escape-string-replace.outputs.text }}"
+        if [[ "$replace_substring" == "" ]]; then
           replace_substring="${{ inputs.replace }}"
         fi
         echo "Using replace text:"$replace_substring
 
-        sed_replacement_string="$find_substring/$new_substring"
+        sed_replacement_string="$find_substring/$replace_substring"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
           sed_replacement_string="\b"$sed_replacement_string
         fi
