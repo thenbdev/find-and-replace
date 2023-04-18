@@ -25,14 +25,14 @@ runs:
   using: "composite"
   steps:
     - name: "Escaped text in find"
-      if: ${{ inputs.regex-in-find == true }}
+      if: ${{ inputs.regex-in-find == false }}
       uses: thenbdev/escape-string@main
       id: escape-string-find
       with:
         text: ${{ inputs.find }}
 
     - name: "Escaped text in replace"
-      if: ${{ inputs.regex-in-replace == true }}
+      if: ${{ inputs.regex-in-replace == false }}
       uses: thenbdev/escape-string@main
       id: escape-string-replace
       with:
