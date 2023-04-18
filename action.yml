@@ -58,10 +58,10 @@ runs:
         fi
         echo "Using replace text:"$replace_substring
 
-        sed_replacement_string="$find_substring/$replace_substring"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
-          sed_replacement_string="\(^\|\s\)"$sed_replacement_string"\(\s\|$\)"
+          find_substring="\(^\|\s\)"$find_substring"\(\s\|$\)"
         fi
+        sed_replacement_string="$find_substring/$replace_substring"
         echo $sed_replacement_string
 
         # Use sed to replace the substrings with the new string in all files in the current directory
