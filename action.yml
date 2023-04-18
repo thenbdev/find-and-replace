@@ -65,7 +65,8 @@ runs:
 
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
           find_substring="\(^\|\s\)"$find_substring"\(\s\|$\)"
-          $replace_substring="\1"$replace_substring"\2"
+          replace_substring="\1"$replace_substring"\2"
+          echo "Wrapper for word only search: "$find_substring", "$replace_substring
         fi
         sed_replacement_string="$find_substring/$replace_substring"
         echo $sed_replacement_string
