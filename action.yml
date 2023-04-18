@@ -33,9 +33,6 @@ runs:
       id: escape-string-find
       with:
         text: ${{ inputs.find }}
-      outputs:
-        text: ${{ steps.escape-string-find.outputs.text }}
-
 
     - name: "Escaped text in replace"
       if: ${{ inputs.regex-in-replace == 'false' }}
