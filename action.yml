@@ -12,23 +12,43 @@ inputs:
     description: "Inputs to be considered as words or substring"
     required: false
     default: false
-    
+  regex-in-find:
+    description: "Word given in 'find' to be considered as regex"
+    required: false
+    default: false
+  regex-in-replace:
+    description: "Word given in 'replace' to be considered as regex"
+    required: false
+    default: false
+
 runs:
   using: "composite"
   steps:
-  
     - name: "Find and Replace main"
       shell: bash
       run: |
-        # Escape any forward slashes in the substrings
-        old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
-        echo $old_substrings
+        find_substring="${{ inputs.find }}"
+        replace_substring="${{ inputs.replace }}"
+        echo "Given find:"$find_substring
+        echo "Given replace:"$replace_substring
+        
 
-        sed_replacement_string="$old_substrings/${{ inputs.replace }}"
+        if [[ "${{ inputs.regex-in-find }}" == "false" ]]; then
+          # Escape any regex characters
+          find_substring="$(<<< $find_substring sed -e 's`[][\\/.*^${}+|]`\\&`g')"
+          echo "Escaped find:"$find_substring
+        fi
+        if [[ "${{ inputs.regex-in-replace }}" == "false" ]]; then
+          # Escape any regex characters
+          replace_substring="$(<<< $replace_substring sed -e 's`[][\\/.*^${}+|]`\\&`g')"
+          echo "Escaped replace:"$replace_substring
+        fi
+
+        sed_replacement_string="$find_substring/$new_substring"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
           sed_replacement_string="\b"$sed_replacement_string
         fi
         echo $sed_replacement_string
 
         # Use sed to replace the substrings with the new string in all files in the current directory
-        find . -type f -not -path './.git/*' -exec sed -i "s/$sed_replacement_string/g" {} +
+        find . -type f -not -path '.git/*' -exec sed -i "s/$sed_replacement_string/g" {} +
