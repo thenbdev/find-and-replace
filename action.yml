@@ -60,7 +60,7 @@ runs:
 
         sed_replacement_string="$find_substring/$replace_substring"
         if [[ "${{ inputs.words_only }}" == "true" ]]; then
-          sed_replacement_string="\b"$sed_replacement_string
+          sed_replacement_string="\(^\|\s\)"$sed_replacement_string"\(\s\|$\)"
         fi
         echo $sed_replacement_string
 
