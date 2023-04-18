@@ -8,15 +8,27 @@ inputs:
     description: "Final string"
     required: false
     default: ""
+  words_only:
+    description: "Inputs to be considered as words or substring"
+    required: false
+    default: false
     
 runs:
   using: "composite"
   steps:
   
-    - shell: bash
+    - name: "Find and Replace main"
+      shell: bash
       run: |
         # Escape any forward slashes in the substrings
         old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
+        echo $old_substrings
+
+        sed_replacement_string = "$old_substrings/${{ inputs.replace }}"
+        if ${{ inputs.words_only }}; then
+          sed_replacement_string = "\b" + $sed_replacement_string
+        fi
+        echo $sed_replacement_string
 
         # Use sed to replace the substrings with the new string in all files in the current directory
-        find . -type f -not -path './.git/*' -exec sed -i "s/$old_substrings/${{ inputs.replace }}/g" {} +
+        find . -type f -not -path './.git/*' -exec sed -i "s/$sed_replacement_string/g" {} +
