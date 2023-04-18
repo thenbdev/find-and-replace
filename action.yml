@@ -24,9 +24,9 @@ runs:
         old_substrings="$(<<< "${{ inputs.find }}" sed -e 's`[][\\/.*^$]`\\&`g')"
         echo $old_substrings
 
-        sed_replacement_string = "$old_substrings/${{ inputs.replace }}"
-        if ${{ inputs.words_only }}; then
-          sed_replacement_string = "\b" + $sed_replacement_string
+        sed_replacement_string="$old_substrings/${{ inputs.replace }}"
+        if [[ "${{ inputs.words_only }}" == "true" ]]; then
+          sed_replacement_string="\b"+$sed_replacement_string
         fi
         echo $sed_replacement_string
 
