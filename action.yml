@@ -77,4 +77,4 @@ runs:
         fi
 
         # Use sed to replace the substrings with the new string in all files in the current directory
-        find . -type f -not -path '.git/*' -exec sed -i "s/$sed_replacement_string$sed_params" {} +
+        find . -type f -not -path '.git/*' -exec sed -i "s/$sed_replacement_string$sed_params" {} + -print
